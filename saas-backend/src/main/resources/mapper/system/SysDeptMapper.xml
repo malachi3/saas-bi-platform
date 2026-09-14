@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saas.module.system.mapper.SysDeptMapper">
+
+    <resultMap id="BaseResultMap" type="com.saas.module.system.entity.SysDept">
+        <id column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="name" property="name"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="ancestors" property="ancestors"/>
+        <result column="sort" property="sort"/>
+        <result column="leader" property="leader"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="status" property="status"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted_at" property="deletedAt"/>
+        <result column="version" property="version"/>
+    </resultMap>
+
+    <select id="selectDeptPage" resultMap="BaseResultMap">
+        SELECT * FROM sys_dept
+        WHERE deleted_at IS NULL
+        <if test="ew != null">
+            <if test="ew.entity != null and ew.entity.name != null">
+                AND name LIKE CONCAT('%', #{ew.entity.name}, '%')
+            </if>
+            <if test="ew.entity != null and ew.entity.status != null">
+                AND status = #{ew.entity.status}
+            </if>
+            <if test="ew.entity != null and ew.entity.parentId != null">
+                AND parent_id = #{ew.entity.parentId}
+            </if>
+        </if>
+        ORDER BY sort ASC
+    </select>
+
+    <select id="selectDeptTree" resultMap="BaseResultMap">
+        SELECT * FROM sys_dept
+        WHERE deleted_at IS NULL
+        <if test="ew != null">
+            <if test="ew.entity != null and ew.entity.name != null">
+                AND name LIKE CONCAT('%', #{ew.entity.name}, '%')
+            </if>
+            <if test="ew.entity != null and ew.entity.status != null">
+                AND status = #{ew.entity.status}
+            </if>
+        </if>
+        ORDER BY sort ASC
+    </select>
+
+    <select id="selectChildDeptIds" resultType="java.lang.Long">
+        SELECT id FROM sys_dept
+        WHERE deleted_at IS NULL AND ancestors LIKE CONCAT('%', #{parentId}, '%')
+    </select>
+
+    <select id="countChildren" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM sys_dept
+        WHERE deleted_at IS NULL AND parent_id = #{parentId}
+    </select>
+
+    <select id="countUsers" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM sys_user
+        WHERE deleted_at IS NULL AND dept_id = #{deptId}
+    </select>
+
+</mapper>

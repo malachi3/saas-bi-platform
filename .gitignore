@@ -1,0 +1,43 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# Build
+saas-backend/target/
+saas-frontend/node_modules/
+saas-frontend/dist/
+saas-frontend/.nuxt/
+saas-frontend/.output/
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+saas-backend/**/node_modules/
+saas-frontend/**/node_modules/
+
+# Temp files
+*.tmp
+*.bak
+*.cache
+
+# Maven
+saas-backend/*.jar
+saas-backend/*.war
+
+# Gradle
+saas-backend/.gradle/
+saas-backend/build/

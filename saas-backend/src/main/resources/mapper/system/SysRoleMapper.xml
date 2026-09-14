@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saas.module.system.mapper.SysRoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.saas.module.system.entity.SysRole">
+        <id column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="sort" property="sort"/>
+        <result column="data_scope" property="dataScope"/>
+        <result column="remark" property="remark"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted_at" property="deletedAt"/>
+        <result column="version" property="version"/>
+    </resultMap>
+
+    <select id="selectRolePage" resultMap="BaseResultMap">
+        SELECT * FROM sys_role
+        WHERE deleted_at IS NULL
+        <if test="ew != null">
+            <if test="ew.entity != null and ew.entity.name != null">
+                AND name LIKE CONCAT('%', #{ew.entity.name}, '%')
+            </if>
+            <if test="ew.entity != null and ew.entity.code != null">
+                AND code = #{ew.entity.code}
+            </if>
+            <if test="ew.entity != null and ew.entity.status != null">
+                AND status = #{ew.entity.status}
+            </if>
+        </if>
+        ORDER BY sort ASC
+    </select>
+
+    <select id="selectRolesByUserId" resultMap="BaseResultMap">
+        SELECT r.* FROM sys_role r
+        INNER JOIN sys_user_role ur ON r.id = ur.role_id
+        WHERE r.deleted_at IS NULL
+        AND r.status = 1
+        AND ur.user_id = #{userId}
+        ORDER BY r.sort ASC
+    </select>
+
+    <select id="countByCode" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM sys_role
+        WHERE deleted_at IS NULL AND code = #{code}
+        <if test="excludeId != null">
+            AND id != #{excludeId}
+        </if>
+    </select>
+
+    <select id="selectByCode" resultMap="BaseResultMap">
+        SELECT * FROM sys_role
+        WHERE deleted_at IS NULL AND code = #{code}
+    </select>
+
+    <select id="selectRoleIdsByUserId" resultType="java.lang.Long">
+        SELECT role_id FROM sys_user_role
+        WHERE user_id = #{userId}
+    </select>
+
+</mapper>

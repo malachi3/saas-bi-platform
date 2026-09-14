@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/saas_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: Admin@123
+
+logging:
+  level:
+    com.saas: DEBUG
+    com.baomidou.mybatisplus: DEBUG
